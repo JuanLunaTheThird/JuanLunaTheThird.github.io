@@ -1,1 +1,78 @@
-Hello World
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>uWu OwO</title>
+</head>
+
+<body>
+<script src="https://unpkg.com/kvdb.io@v1.0"></script>
+    <script>
+
+    function onClick(){
+        document.getElementById("button").innerHTML = "You're stuck with me now";
+        const kvdbStorage = KVdb.bucket('KYPDCWMQ2M9nfjS3XnSMzV').localStorage();
+        
+        kvdbStorage.getItem('clicked').then(ret_val => {
+            if(ret_val == "False"){
+                const date = new Date();
+                kvdbStorage.setItem('Date', date.toString())
+                    .then(() => console.log('key saved')
+                    .then(() => kvdbStorage.getItem('Date'))
+                    .then(value => console.log('get value', value))
+                    .catch(err => console.error(err)));
+                /*
+                kvdbStorage.setItem('clicked', 'True')
+                    .then(() => console.log('key saved')
+                    .then(() => kvdbStorage.getItem('clicked'))
+                    .then(value => console.log('get value', value))
+                    .catch(err => console.error(err)));  
+                */
+            }
+        });
+    }
+
+
+
+    const kvdbStorage = KVdb.bucket('KYPDCWMQ2M9nfjS3XnSMzV').localStorage();
+
+    let timeSince = 0;
+    kvdbStorage.getItem('clicked').then(ret_val => {
+        if(ret_val === "False"){
+            kvdbStorage.getItem('Date').then(dateTime => {
+                timeSince = new Date(dateTime);
+                document.getElementById("time").innerHTML = timeSince.toString();
+                var startStamp = timeSince.getTime();
+
+                var newDate = new Date();
+                var newStamp = newDate.getTime();
+
+                var timer;
+
+                function updateClock() {
+                    newDate = new Date();
+                    newStamp = newDate.getTime();
+                    var diff = Math.round((newStamp-startStamp)/1000);
+                    
+                    var d = Math.floor(diff/(24*60*60));
+                    diff = diff-(d*24*60*60);
+                    var h = Math.floor(diff/(60*60));
+                    diff = diff-(h*60*60);
+                    var m = Math.floor(diff/(60));
+                    diff = diff-(m*60);
+                    var s = diff;
+                    
+                    document.getElementById("time-elapsed").innerHTML = d+" day(s), "+h+" hour(s), "+m+" minute(s), "+s+" second(s) stuck with Juan :(";
+                }
+                setInterval(updateClock, 1000);
+            });
+        }
+    });
+</script>
+<div id="test"></div>
+
+<p id="button" onclick="onClick()"> Click me if you're cringe</p>
+<div id="time"></div>
+<p> We've been together this long</p>
+<div id = "time-elapsed"></div>
+</body>
+</html> 
